@@ -128,7 +128,6 @@ def login(msg=None):
     ret.append('</form>')
     return _out(ret)
 
-@ssl
 @app.route('/term', methods=['POST'])
 def term():
     if request.headers.get('X-Forwarded-Proto') == "http":
@@ -159,7 +158,6 @@ def term():
     
     return _out(ret)
     
-@ssl
 @app.route('/people', methods=['POST'])
 def people():
     if request.headers.get('X-Forwarded-Proto') == "http":
@@ -197,7 +195,6 @@ def people():
     
     return _out(ret)
 
-@ssl
 @app.route('/search', methods=['POST'])
 def search():
     if request.headers.get('X-Forwarded-Proto') == "http":
