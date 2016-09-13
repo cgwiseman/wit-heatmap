@@ -125,6 +125,7 @@ def ssl(f):
 @app.route('/', methods=['POST', 'GET'])
 def login(msg=None):
     ret = []
+    ret.append(str(request.headers.get('X-Forwarded-Proto')))
     if msg:
         ret.append('<b>{}</b>'.format(msg))
     ret.append('<form method="POST" action="term">')
@@ -251,4 +252,4 @@ def search():
 ##############################################################################
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
