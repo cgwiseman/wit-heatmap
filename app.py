@@ -108,24 +108,15 @@ def _has_needed(l):
             return False
     return True
 
-def ssl(f):
-
-    def wrapper(*args):
-        if request.headers.get('X-Forwarded-Proto') == "http":
-            return redirect(request.url.replace('http://', 'https://', 1), code=301)
-        else:
-            return f(*args)
-
-    return wrapper
-
 ##############################################################################
 ##############################################################################
 
-@ssl
 @app.route('/', methods=['POST', 'GET'])
 def login(msg=None):
+    if request.headers.get('X-Forwarded-Proto') == "http":
+        return redirect(request.url.replace('http://', 'https://', 1), code=301)
+    
     ret = []
-    ret.append(str(request.headers.get('X-Forwarded-Proto')))
     if msg:
         ret.append('<b>{}</b>'.format(msg))
     ret.append('<form method="POST" action="term">')
@@ -140,6 +131,9 @@ def login(msg=None):
 @ssl
 @app.route('/term', methods=['POST'])
 def term():
+    if request.headers.get('X-Forwarded-Proto') == "http":
+        return redirect(request.url.replace('http://', 'https://', 1), code=301)
+    
     ret = []
     if not _has_needed(("user","pw",)):
         return login()
@@ -168,6 +162,9 @@ def term():
 @ssl
 @app.route('/people', methods=['POST'])
 def people():
+    if request.headers.get('X-Forwarded-Proto') == "http":
+        return redirect(request.url.replace('http://', 'https://', 1), code=301)
+    
     if not _has_needed(("sid","term",)):
         return login()
     
@@ -203,6 +200,9 @@ def people():
 @ssl
 @app.route('/search', methods=['POST'])
 def search():
+    if request.headers.get('X-Forwarded-Proto') == "http":
+        return redirect(request.url.replace('http://', 'https://', 1), code=301)
+    
     if not _has_needed(("sid","term","profs","students",)):
         return login()
         
