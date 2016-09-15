@@ -123,15 +123,15 @@ def _header(ret, title):
 	ret.append('<meta http-equiv="X-UA-Compatible" content="IE=edge">')
 	ret.append('<meta name="viewport" content="width=device-width, initial-scale=1">')
 	ret.append('<link rel="shortcut icon" href="{}" type="image/x-icon"><link rel="icon" href="{}" type="image/x-icon">'.format(url_for('static', filename='favicon.ico'),url_for('static', filename='favicon.ico')))
-	ret.append('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">')
+	ret.append('<link href="{}" rel="stylesheet">'.format(url_for('static', filename="bootstrap.css")))
 	ret.append('<title>WIT HeatMap - {}</title>'.format(html.escape(title)))
 	ret.append('</head><body><div class="container">')
 	ret.append('<h1>{}</h1>'.format(html.escape(title)))
 
 def _footer(ret):
 	ret.append('</div>')
-	ret.append('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>')
-	ret.append('<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>')
+	# ret.append('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>')
+	# ret.append('<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>')
 	ret.append('</body></html>')
 
 ##############################################################################
@@ -281,7 +281,7 @@ def search():
 	if studentslist:
 		ret.append('<h4>Students ({}) <small>'.format(len(studentslist)) + html.escape('; '.join(studentslist)) + '</small></h4>')
 
-	ret.append('<div class="row"><div class="table-responsive"><table class="table table-bordered table-condensed" style="width: auto !important;">')
+	ret.append('<div class="row"><div class="table-responsive"><table class="table table-bordered table-condensed" style="width: auto !important">')
 
 	ret.append('<tr>')
 	ret.append('<th width="80px"></th>')
@@ -299,7 +299,7 @@ def search():
 
 	ret.append('</table></div><div>')
 
-	ret.append('<div class="row"><a class="btn btn-primary" href="{}">Search Again</a></div>'.format(url_for('people', sid=banner.lastid(), term=request.args["term"])))
+	ret.append('<div class="row"><a class="btn btn-primary hidden-print" href="{}">Search Again</a></div>'.format(url_for('people', sid=banner.lastid(), term=request.args["term"])))
 	
 	_footer(ret)
 
