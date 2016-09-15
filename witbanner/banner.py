@@ -38,7 +38,7 @@ def _get(endpoint, params={}):
 def _post(endpoint, params={}):
 	return _call(endpoint, "post", params)
 
-def init(sid=None, u=None, p=None, dieonfail=True):
+def init(sid=None, u=None, p=None):
 	global _SID
 
 	if sid is None:
@@ -58,25 +58,22 @@ def init(sid=None, u=None, p=None, dieonfail=True):
 		for input_field in f.find_all("input", {"type":"hidden"}):
 			params[safestr(input_field["name"])] = safestr(input_field["value"])
 
-		if u is None or p is None:
-			params["username"] = input("Login: ")
-			params["password"] = getpass.getpass("Password: ")
-		else:
-			params["username"] = u
-			params["password"] = p
+		##
+
+		params["username"] = input("Login: ") if u is None else u
+		params["password"] = getpass.getpass("Password: ") if p is None else p
 
 		r = requests.post(action, data=params)
 		if "SESSID" in r.cookies:
-			sid = r.cookies["SESSID"]
-
-	if sid is None:
-		if dieonfail:
-			print("Initialization Error!")
-			sys.exit()
-		return False
+			_SID = r.cookies["SESSID"]
+			return True
 	else:
 		_SID = sid
-		return True
+		if mainmenu() is None:
+			_SID = None
+			return False
+		else:
+			return True
 
 def lastid():
 	global _SID

@@ -107,7 +107,7 @@ def _has_needed_post(l):
 		if n not in request.form:
 			return False
 	return True
-	
+
 def _has_needed_get(l):
 	for n in l:
 		if n not in request.args:
@@ -169,18 +169,18 @@ def term():
 	if not _has_needed_post(("user","pw",)):
 		return login()
 
-	if not banner.init(u=request.form["user"], p=request.form["pw"], dieonfail=False):
+	if not banner.init(u=request.form["user"], p=request.form["pw"]):
 		return login("Login failed!")
 
 	##
 
 	finfo = banner.termform()
-	
+
 	##
-	
+
 	ret = []
 	_header(ret, 'Select Term')
-	
+
 	ret.append('<form action="people" method="GET">')
 	ret.append('<input type="hidden" name="sid" value="{}" />'.format(html.escape(banner.lastid())))
 
@@ -192,11 +192,11 @@ def term():
 		ret.append('<option {}value="{}">{}</option>'.format('selected="selected" ' if code==now else '', html.escape(code), html.escape(name)))
 	ret.append('</select>')
 	ret.append('</div>')
-	
+
 	ret.append('<input type="submit" class="btn btn-default" />')
-	
+
 	ret.append('</form>')
-	
+
 	_footer(ret)
 
 	return _out(ret)
@@ -209,18 +209,18 @@ def people():
 	if not _has_needed_get(("sid","term",)):
 		return login()
 
-	if not banner.init(sid=request.args["sid"], dieonfail=False):
+	if not banner.init(sid=request.args["sid"]):
 		return login("Bad session!")
-		
+
 	##
 
 	codes = banner.sectioncodes(request.args["term"])
-	
+
 	##
 
 	ret = []
 	_header(ret, 'Select People')
-	
+
 	ret.append('<form action="search" method="GET">')
 	ret.append('<input type="hidden" name="sid" value="{}" />'.format(html.escape(banner.lastid())))
 	ret.append('<input type="hidden" name="term" value="{}" />'.format(html.escape(request.args["term"])))
@@ -243,7 +243,7 @@ def people():
 	ret.append('<input type="submit" class="btn btn-default" />')
 
 	ret.append('</form>')
-	
+
 	_footer(ret)
 
 	return _out(ret)
@@ -256,11 +256,11 @@ def search():
 	if not _has_needed_get(("sid","term",)):
 		return login()
 
-	if not banner.init(sid=request.args["sid"], dieonfail=False):
+	if not banner.init(sid=request.args["sid"]):
 		return login("Bad session!")
 
 	##
-	
+
 	profslist = request.args.getlist("profs")
 	studentslist = request.args["students"].split()
 
@@ -269,7 +269,7 @@ def search():
 
 	day_names = list(days.keys())
 	slot_names = sorted(days[day_names[0]].keys())
-	
+
 	##
 
 	ret = []
@@ -300,7 +300,7 @@ def search():
 	ret.append('</table></div><div>')
 
 	ret.append('<div class="row"><a class="btn btn-primary hidden-print" href="{}">Search Again</a></div>'.format(url_for('people', sid=banner.lastid(), term=request.args["term"])))
-	
+
 	_footer(ret)
 
 	return _out(ret)
