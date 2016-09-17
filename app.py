@@ -156,7 +156,7 @@ def login(msg=None):
 	ret.append('<label id="pw">Password</label>')
 	ret.append('<input type="password" id="pw" class="form-control" name="pw" placeholder="WIT Password" />')
 	ret.append('</div>')
-	ret.append('<input type="submit" class="btn btn-default" />')
+	ret.append('<input type="submit" class="btn btn-default" value="Login" />')
 	ret.append('</form>')
 
 	return _out(ret)
@@ -193,7 +193,7 @@ def term():
 	ret.append('</select>')
 	ret.append('</div>')
 
-	ret.append('<input type="submit" class="btn btn-default" />')
+	ret.append('<input type="submit" class="btn btn-default" value="Submit" />')
 
 	ret.append('</form>')
 
@@ -240,7 +240,7 @@ def people():
 	ret.append('</textarea>')
 	ret.append('</div>')
 
-	ret.append('<input type="submit" class="btn btn-default" />')
+	ret.append('<input type="submit" class="btn btn-default" value="Submit" />')
 
 	ret.append('</form>')
 
