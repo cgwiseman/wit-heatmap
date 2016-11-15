@@ -129,7 +129,7 @@ def _header(ret, title):
 	ret.append('<link href="{}" rel="stylesheet">'.format(url_for('static', filename="bootstrap.css")))
 	ret.append('<title>{} - {}</title>'.format(html.escape(SITE_TITLE), html.escape(title)))
 	if ANALYTICS_ID:
-		ret.append("<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga'); ga('create', '{}', 'auto');ga('send', 'pageview');</script>')".format(html.escape(ANALYTICS_ID)))
+		ret.append("<script>(function(i,s,o,g,r,a,m){{i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){{(i[r].q=i[r].q||[]).push(arguments)}},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)}})(window,document,'script','https://www.google-analytics.com/analytics.js','ga'); ga('create', '{}', 'auto');ga('send', 'pageview');</script>".format(html.escape(ANALYTICS_ID)))
 	ret.append('</head><body><div class="container">')
 	ret.append('<h1>{}</h1>'.format(html.escape(title)))
 
