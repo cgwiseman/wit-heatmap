@@ -86,7 +86,7 @@ def _demo_studentschedule(term, students, days):
 				for day in meeting["days"]:
 					for tf in range(_demo_time_to_index(meeting["times"][0], True), _demo_time_to_index(meeting["times"][1], False)+1, 5):
 						if tf>=80 and tf<200:
-							days[day][tf].add(xyz)
+							days[day][tf].add(student)
 
 def demo_schedule(term, instructors, students):
 	days = {d:{t:set() for t in range(80, 200, 5)} for d in _DAYS.keys()}
@@ -299,7 +299,7 @@ def search():
 		ret.append('<th>{}</th>'.format(html.escape(_demo_search_time(slot))))
 		for d in _DAYS.keys():
 			count = len(days[d][slot])
-			ret.append('<td class="text-center {}">{}</td>'.format(_demo_search_color(count, num), html.escape(str(count) if count > 0 else "")))
+			ret.append('<td title="{}" class="text-center {}">{}</td>'.format(html.escape("; ".join(days[d][slot])), _demo_search_color(count, num), html.escape(str(count) if count > 0 else "")))
 		ret.append('</tr>')
 
 	ret.append('</table></div><div>')
