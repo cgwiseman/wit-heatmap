@@ -1,0 +1,71 @@
+This document outlines how to get wit-heatmap running on a local Ubuntu 16.04 install.  Note that newer LTS releases of Ubuntu (18.04 and 20.04) won't work.  The backend webserver that wit-heatmap contacts to access schedule info is old enough that the version of SSL used is outdated.  Newer OpenSSL libraries can't connect to it, hence we have to run an older Ubuntu LTS to be able to connect to it.
+
+DigitalOcean has some excellent guides to help.  This setup was done based on the following guides:
+
+https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
+https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uwsgi-and-nginx-on-ubuntu-16-04
+
+First, enable the firewall:
+
+sudo ufw allow OpenSSH
+sudo ufw enable
+
+Next install nginx:
+
+sudo apt update
+sudo apt install nginx
+sudo ufw allow 'Nginx Full'
+
+You should edit the default HTML file in /var/www/html/index.nginx-debian.html to be something just in case someone tries to connect via IP, etc. If you haven't already, clone this repo to your local machine.  Be sure you are in the wit-heatmap directory. Then setup a python environment:
+
+sudo apt update
+sudo apt install python3-pip python3-dev
+sudo pip3 install virtualenv
+sudo pip3 install --upgrade pip
+virtualenv heatmapenv
+. heatmapenv/bin/activate
+pip install -r requirements.txt
+
+Next, add the system service to start the app.  Edit /etc/systemd/system/wit-heatmap.service and add this:
+
+[Unit]
+Description=uWSGI instance to serve wit-heatmap
+After=network.target
+
+[Service]
+User=wisemanc
+Group=www-data
+WorkingDirectory=/home/wisemanc/wit-heatmap
+Environment="PATH=/home/wisemanc/wit-heatmap/heatmapenv/bin"
+ExecStart=/home/wisemanc/wit-heatmap/heatmapenv/bin/uwsgi --ini wit-heatmap.ini
+
+[Install]
+WantedBy=multi-user.target
+
+NOTE: obviously, change all instances of wisemanc with the user running the app. Also go ahead and create the wit-heatmap server block for nginx.  Edit /etc/nginx/sites-available/wit-heatmap and add this:
+
+server {
+    listen 80;
+    server_name mapz.cs.wit.edu;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/home/wisemanc/wit-heatmap/wit-heatmap.sock;
+    }
+}
+
+AGAIN, be sure to change the username.  Finally, let's get everything ready for SSL:
+
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt update
+sudo apt install python-certbot-nginx
+sudo certbot --nginx -d mapz.cs.wit.edu
+
+When you run this last command, you'll be prompted to enter your email address for the cert, agree to the terms, share your email with the EFF (you don't have to do this one), and whether you want to redirect unencrypted traffic to the SSL version (which you should!).  Now enable and run the app service and reload nginx:
+
+sudo ln -s /etc/nginx/sites-available/wit-heatmap /etc/nginx/sites-enabled
+sudo systemctl reload nginx
+sudo systemctl enable wit-heatmap
+sudo systemctl start wit-heatmap
