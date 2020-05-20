@@ -21,8 +21,8 @@ _DAYS["F"] = "Friday"
 def _demo_search_time(slot):
 	ampm = "am" if slot < 120 else "pm"
 	slot -= 0 if slot < 130 else 120
-	m = "30" if (slot / 5) % 2 is 1 else "00"
-	h = slot / 10
+	m = "30" if int((int(slot) / 5)) % 2 is 1 else "00"
+	h = int(int(slot) / 10)
 	return "{}:{} {}".format(h, m, ampm)
 
 def _demo_search_color(count, numprofs):
