@@ -50,6 +50,8 @@ server {
     listen 80;
     server_name mapz.cs.wit.edu;
 
+    large_client_header_buffers 4 16k;
+
     location / {
         include uwsgi_params;
         uwsgi_pass unix:/home/wisemanc/wit-heatmap/wit-heatmap.sock;
